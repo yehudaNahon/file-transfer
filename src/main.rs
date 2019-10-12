@@ -1,5 +1,9 @@
 extern crate clap;
+#[macro_use]
+extern crate log;
+extern crate env_logger;
 use clap::{App, SubCommand};
+
 
 fn main() {
     let matches = App::new("File Transfer")
@@ -19,14 +23,8 @@ fn main() {
         )
         .get_matches();
 
-    match matches.occurrences_of("v") {
-        0 => println!("No verbose info"),
-        1 => println!("Some verbose info"),
-        2 => println!("Tons of verbose info"),
-        3 | _ => println!("Don't be crazy"),
-    }
     match matches.subcommand_name() {
         Some("receive") => println!("receive was used"),
-        _ => println!("Invalid command"),
+        _ => error!("Invalid command"),
     }
 }
