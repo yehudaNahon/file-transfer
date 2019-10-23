@@ -3,6 +3,22 @@ extern crate clap;
 extern crate log;
 extern crate env_logger;
 use clap::{App, SubCommand};
+use std::net::{SocketAddrV4, Ipv4Addr, TcpListener};
+use std::io::{Read, Error};
+
+fn listen(ip: str, port: u32) -> Result<(), Error> {
+    let socket = SocketAddrV4::new(Ipv4Addr::LOCALHOST, 0);
+    let listener = TcpListener::bind(socket)?;
+    let port = listener.local_addr()?;
+    println!("Listening on {}, access this port to end the program", port);
+    let (mut tcp_stream, addr) = listener.accept()?; //block  until requested
+    println!("Connection received! {:?} is sending data.", addr);
+    let mut input = String::new();
+    let _ = tcp_stream.read_to_string(&mut input)?;
+    println!("{:?} says {}", addr, input);
+    Ok(())
+}
+
 
 
 fn main() {
